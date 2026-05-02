@@ -1,24 +1,16 @@
 import { test, expect } from '@playwright/test';
+import { login } from '../Functions/login';
 
 test('Teste de login com sucesso', async ({ page }) => {
-    await page.goto('https://www.saucedemo.com/');
-    await expect(await page.title()).toBe('Swag Labs');
-    
-    await page.locator('[data-test="username"]').fill('standard_user');
-    await page.locator('[data-test="password"]').fill('secret_sauce');
-    
-    await page.locator('[data-test="login-button"]').click();
+  
+    await login(page, 'standard_user', 'secret_sauce');
     await expect(await page.url('https://www.saucedemo.com/inventory.html')).toBeTruthy();
 
 });
 
 test('Teste de login com falha', async ({ page }) => {
-    await page.goto('https://www.saucedemo.com/');
-    await expect(await page.title()).toBe('Swag Labs');
-
-    await page.locator('[data-test="username"]').fill('standard_user');
-    await page.locator('[data-test="password"]').fill('senhaerrada');
-    await page.locator('[data-test="login-button"]').click();
+    
+    await login(page, 'standard_user', 'senhaerrada');
 
     const errorMessage = await page.locator('[data-test="error"]').textContent();
     await expect(errorMessage).toBe('Epic sadface: Username and password do not match any user in this service');

@@ -1,14 +1,12 @@
 import { test, expect } from '@playwright/test';
+import { login } from '../Functions/login';
+
+test.beforeEach(async ({ page }) => {
+    
+    await login(page, 'standard_user', 'secret_sauce');
+});
 
 test('se todos produtos da lista estao corretos', async ({ page }) => {
-
-    
-
-    await page.goto('https://www.saucedemo.com/');
-    await expect(await page.title()).toBe('Swag Labs');
-    await page.locator('[data-test="username"]').fill('standard_user');
-    await page.locator('[data-test="password"]').fill('secret_sauce');
-    await page.locator('[data-test="login-button"]').click();
 
     const productNames = await page.locator('.inventory_item_name').allTextContents();
     const expectedProductNames = [
@@ -23,12 +21,6 @@ test('se todos produtos da lista estao corretos', async ({ page }) => {
 });
 
 test.fail('verificar se todos os produtos tem nome sauce labs', async ({ page }) => {
-
-    await page.goto('https://www.saucedemo.com/');
-    await expect(await page.title()).toBe('Swag Labs');
-    await page.locator('[data-test="username"]').fill('standard_user');
-    await page.locator('[data-test="password"]').fill('secret_sauce');
-    await page.locator('[data-test="login-button"]').click();
 
     const productNames = await page.locator('.inventory_item_name').allTextContents();
     for (const productName of productNames) {
