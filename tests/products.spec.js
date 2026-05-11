@@ -1,9 +1,8 @@
 import { test, expect } from '@playwright/test';
-import { login } from '../Functions/login';
+import { login, loginWithCorrectCredentials } from '../Functions/login';
 
 test.beforeEach(async ({ page }) => {
-    
-    await login(page, 'standard_user', 'secret_sauce');
+    await loginWithCorrectCredentials(page);
 });
 
 test('se todos produtos da lista estao corretos', async ({ page }) => {

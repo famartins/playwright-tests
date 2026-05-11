@@ -1,18 +1,15 @@
+// tests/login.spec.js
 import { test, expect } from '@playwright/test';
-import { login } from '../Functions/login';
+import { login, loginWithCorrectCredentials, loginWithIncorrectCredentials } from '../Functions/login';
+import { BASE_URL, USER_NAME } from '../Functions/constants';
 
 test('Teste de login com sucesso', async ({ page }) => {
-  
-    await login(page, 'standard_user', 'secret_sauce');
-    await expect(await page.url('https://www.saucedemo.com/inventory.html')).toBeTruthy();
-
+    await loginWithCorrectCredentials(page);  
+    await expect(page).toHaveURL(BASE_URL);
 });
 
 test('Teste de login com falha', async ({ page }) => {
-    
-    await login(page, 'standard_user', 'senhaerrada');
-
-    const errorMessage = await page.locator('[data-test="error"]').textContent();
-    await expect(errorMessage).toBe('Epic sadface: Username and password do not match any user in this service');
-
+    await loginWithIncorrectCredentials(page);
+    const errorMessage = page.locator('[data-test="error"]');
+    await expect(errorMessage).toHaveText('Epic sadface: Username and password do not match any user in this service');
 });
